@@ -7,27 +7,43 @@ const router = express.Router();
 const URL = 'https://www.whakoom.com/pwkws.asmx/QuickView';
 
 function normalize(input) {
-  return input
+  return input ? input
     .replace('\r', '')
     .replace('\t', '')
     .replace('\n', '')
     .replace('&nbsp;', '')
-    .trim();
+    .trim() : '';
 }
 
 function parseDom(rawHtml) {
   const html = parse(rawHtml);
+
   const fullTitle = html.querySelector('div.b-info h1');
   const title = normalize(fullTitle.querySelector('span').innerText);
-  const number = normalize(fullTitle.querySelector('strong').innerText.replace('#', ''));
+  const itemNumber = +normalize(fullTitle.querySelector('strong').innerText).replace('#', '');
 
   const description = normalize(html.querySelector('div.wiki-content div p').innerText);
-  const authors = normalize(html.querySelector('div.authors.info-item p').innerText);
+
+  const rawAuthors = normalize(html.querySelector('div.authors.info-item p').innerText);
+  const authors = (rawAuthors.split(',') || []).map((item) => item.trim());
+
+  const cover = html.querySelector('div.b-info p.comic-cover a.fancybox').rawAttributes.href || '';
+  const publishedDate = html.querySelector('div.info div div p').rawAttributes.content;
+  const rating = +normalize(html.querySelector('span.stars span.stars-bg span.stars-value').innerText);
+
+  const [, rawLanguage, rawPublisher] = html.querySelectorAll('p.lang-pub span');
+  const language = normalize(rawLanguage.innerText);
+  const publisher = normalize(rawPublisher.innerText);
   return {
     title,
-    number,
+    item_number: itemNumber,
     description,
     authors,
+    cover,
+    published_date: publishedDate,
+    rating,
+    language,
+    publisher
   };
 }
 
