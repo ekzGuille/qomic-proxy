@@ -22,3 +22,6 @@ Proxy que mapea las peticiones de la web de cómics [Whakoom](https://www.whakoo
 }
 ```
 
+## Deployed endpoint
+
+* [Vercel link](https://qomic-proxy.vercel.app/)
