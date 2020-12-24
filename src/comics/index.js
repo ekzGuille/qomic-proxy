@@ -31,7 +31,7 @@ function parseDom(rawHtml) {
   };
 }
 
-router.get('/comic/:id', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   if (id) {
     try {
