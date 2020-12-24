@@ -1,6 +1,6 @@
 # Qomic API Proxy
 
-Proxy que mapea las peticiones de los cómics de: [Whakoom](https://www.whakoom.com/)
+Proxy que mapea las peticiones de la web de cómics [Whakoom](https://www.whakoom.com/)
 
 ## Utilización
 * Petición **GET** a
@@ -11,9 +11,14 @@ Proxy que mapea las peticiones de los cómics de: [Whakoom](https://www.whakoom.
 ```json
 {
   "title": "string",
-  "number": "string",
+  "item_number": "number",
   "description": "string",
-  "authors": "string" // comma-separated values
+  "authors": "string[]",
+  "cover": "string",
+  "published_date": "date", // YYYY-mm-dd
+  "rating": "number",
+  "language": "string",
+  "publisher": "string",
 }
 ```
 
