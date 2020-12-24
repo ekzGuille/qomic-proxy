@@ -3,10 +3,8 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 
-require('dotenv').config();
-
 const middlewares = require('./middlewares');
-const api = require('./api');
+const comics = require('./comics');
 
 const app = express();
 
@@ -15,13 +13,15 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+app.use(middlewares.setHeader);
+
 app.get('/', (req, res) => {
   res.json({
-    message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄'
+    message: '📚'
   });
 });
 
-app.use('/api/v1', api);
+app.use('/api/comic', comics);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
