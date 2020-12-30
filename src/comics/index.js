@@ -16,21 +16,32 @@ function parseDom(rawHtml) {
   const html = parse(rawHtml);
 
   const fullTitle = html.querySelector('div.b-info h1');
-  const title = normalize(fullTitle.querySelector('span').innerText);
-  const itemNumber = +normalize(fullTitle.querySelector('strong').innerText).replace('#', '');
+  const titleDOM = fullTitle.querySelector('span');
+  const title = titleDOM ? normalize(titleDOM.innerText) : undefined;
 
-  const description = normalize(html.querySelector('div.wiki-content div p').innerText);
+  const itemNumberDOM = fullTitle.querySelector('strong');
+  const itemNumber = itemNumberDOM ? +normalize(itemNumberDOM.innerText).replace('#', '') : undefined;
 
-  const rawAuthors = normalize(html.querySelector('div.authors.info-item p').innerText);
-  const authors = (rawAuthors.split(',') || []).map((item) => item.trim());
+  const descriptionDOM = html.querySelectorAll('div.wiki-content div p');
+  const description = descriptionDOM.length ? [...descriptionDOM].map((i) => normalize(i.innerText)).join(' - ') : undefined;
 
-  const cover = html.querySelector('div.b-info p.comic-cover a.fancybox').rawAttributes.href || '';
-  const publishedDate = html.querySelector('div.info div div p').rawAttributes.content;
-  const rating = +normalize(html.querySelector('span.stars span.stars-bg span.stars-value').innerText);
+  const rawAuthorsDOM = html.querySelectorAll('div.authors.info-item p a');
+  const authors = rawAuthorsDOM.length ? [...rawAuthorsDOM].map((i) => normalize(i.innerText)) : [];
 
-  const [, rawLanguage, rawPublisher] = html.querySelectorAll('p.lang-pub span');
-  const language = normalize(rawLanguage.innerText);
-  const publisher = normalize(rawPublisher.innerText);
+  const coverDOM = html.querySelector('div.b-info p.comic-cover a.fancybox');
+  const cover = coverDOM ? coverDOM.rawAttributes.href : undefined;
+
+  const publishedDateDOM = html.querySelector('div.info div div p');
+  const publishedDate = publishedDateDOM ? publishedDateDOM.rawAttributes.content : undefined;
+
+  const ratingDOM = html.querySelector('span.stars span.stars-bg span.stars-value');
+  const rating = ratingDOM ? +normalize(ratingDOM.innerText) : undefined;
+
+  const [, rawLanguageDOM, rawPublisherDOM] = html.querySelectorAll('p.lang-pub span');
+
+  const language = rawLanguageDOM ? normalize(rawLanguageDOM.innerText) : undefined;
+  const publisher = rawPublisherDOM ? normalize(rawPublisherDOM.innerText) : undefined;
+
   return {
     title,
     item_number: itemNumber,
