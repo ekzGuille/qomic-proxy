@@ -8,10 +8,7 @@ const URL = 'https://www.whakoom.com/pwkws.asmx/QuickView';
 
 function normalize(input) {
   return input ? input
-    .replace('\r', '')
-    .replace('\t', '')
-    .replace('\n', '')
-    .replace('&nbsp;', '')
+    .replace(/(\\r)|(\\t)|(\\n)|(&nbsp;)/g, '')
     .trim() : '';
 }
 
